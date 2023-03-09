@@ -45,5 +45,5 @@ if __name__ == '__main__':
     while True:
         find_jobs(page)
         timt_wait = 10
-        print(f'Waiting {timt_wait} seconds.')
+        print(f'Waiting {timt_wait} minutes.')
         time.sleep(timt_wait * 60)
