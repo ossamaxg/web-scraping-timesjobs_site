@@ -21,18 +21,18 @@ def find_jobs(page):
             skills = job.find('span', {'class': 'srp-skills'}).text.strip().replace('  ,  ', ', ')
             # filter out z skill u choose.
             if discarded_skill not in skills:
-                job_url = job.h2.a['href']
+                # job_url = job.h2.a['href']
                 company_name = job.find('h3', {'class': 'joblist-comp-name'}).text.strip()
                 experience = job.li.text.strip().split('vel')[1]        # li > first & no attribute
                 location = job.find('span').text.strip()
-                job_description = job.find('ul', {'class': 'list-job-dtl clearfix'}).li.text.strip().split('Description:')[1]
-                jobs_details.append({'publish_date': publish_date, 'skills': skills, 'job_url': job_url, 'company_name': company_name, 'experience': experience, 'location': location, 'job_description': job_description})
+                # job_description = job.find('ul', {'class': 'list-job-dtl clearfix'}).li.text.strip().split('Description:')[1]
+                jobs_details.append({'publish_date': publish_date, 'skills': skills, 'company_name': company_name, 'experience': experience, 'location': location})
                 # save z results in a TXT file.
-                with open(f'timesjobs/{index}.txt', 'w') as f:
+                with open(f'timesjobs/no_{discarded_skill}_{index}.txt', 'w') as f:
                     f.write(f'Company Name: {company_name} \n')
                     f.write(f'Required Skills: {skills} \n')
-                    f.write(f'Job URL: {job_url}')
-                print(f'File saved: {index}')
+                    # f.write(f'Job URL: {job_url}')
+                print(f'File saved: no_{discarded_skill}_{index}')
     # save z results in a CSV file.
     keys = jobs_details[0].keys()
     with open(f'timesjobs/jobs_details wo {discarded_skill}.csv', 'w') as op_file:
