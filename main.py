@@ -32,7 +32,7 @@ def find_jobs(page):
                     f.write(f'Company Name: {company_name} \n')
                     f.write(f'Required Skills: {skills} \n')
                     # f.write(f'Job URL: {job_url}')
-                print(f'File saved: no_{discarded_skill}_{index}')
+                # print(f'File saved: no_{discarded_skill}_{index}')
     # save z results in a CSV file.
     keys = jobs_details[0].keys()
     with open(f'timesjobs/jobs_details wo {discarded_skill}.csv', 'w') as op_file:
