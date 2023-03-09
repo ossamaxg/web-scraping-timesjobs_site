@@ -16,7 +16,7 @@ def find_jobs(page):
     jobs = soup.find_all('li', {'class': 'clearfix job-bx wht-shd-bx'})
     for index, job in enumerate(jobs):      # enumerate for using index
         publish_date = job.find('span', {'class': 'sim-posted'}).span.text.strip()
-        # discard publish_date contains 'few' word.
+        # discard z publish_date contains 'few' word.
         if 'few' not in publish_date:
             skills = job.find('span', {'class': 'srp-skills'}).text.strip().replace('  ,  ', ', ')
             # filter out z skill u choose.
@@ -41,6 +41,7 @@ def find_jobs(page):
             dict_writer.writerows(jobs_details)
 find_jobs(page)
 
+# make z program excute every 10 minutes.
 if __name__ == '__main__':
     while True:
         find_jobs(page)
