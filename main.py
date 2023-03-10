@@ -40,6 +40,7 @@ def find_jobs():
                     dict_writer = csv.DictWriter(op_file, keys)
                     dict_writer.writeheader()
                     dict_writer.writerows(jobs_details)
+print(f'File saved: jobs_details wo {unfamiliar_skill}.csv')
 
 
 if __name__ == '__main__':
