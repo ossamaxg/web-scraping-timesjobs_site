@@ -1,0 +1,4 @@
+Pub_date: Posted today 
+Company Name: Splice Global Services Pvt Ltd 
+Required Skills: python, django, git, postgresql, oops, linux, mysql 
+More Info: https://www.timesjobs.com/job-detail/python-developer-splice-global-services-pvt-ltd-gurgaon-2-to-5-yrs-jobid-Jnds36iU0vVzpSvf__PLUS__uAgZw==&source=srp
