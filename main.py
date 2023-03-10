@@ -4,46 +4,50 @@ from bs4 import BeautifulSoup
 import csv
 import time
 
-print('Plz put z skills u want to discard: ')
-discarded_skill = input('> ')
-print(f'Filtering out {discarded_skill} ...\n')
-start = time.time()
-page = requests.get('https://www.timesjobs.com/candidate/job-search.html?searchType=personalizedSearch&from=submit&txtKeywords=python&txtLocation=')
-def find_jobs(page):
-    src = page.content
-    soup = BeautifulSoup(src, 'lxml')
+print('\nPlease put unfamiliar skill')
+unfamiliar_skill = input('>')
+print(f'Filtering out {unfamiliar_skill} ...\n')
+
+def find_jobs():
+    html_text = requests.get('https://www.timesjobs.com/candidate/job-search.html?searchType=personalizedSearch&from=submit&txtKeywords=python&txtLocation=').text
+    soup = BeautifulSoup(html_text, 'lxml')
+    jobs = soup.find_all('li', class_='clearfix job-bx wht-shd-bx')
     jobs_details = []
-    jobs = soup.find_all('li', {'class': 'clearfix job-bx wht-shd-bx'})
     for index, job in enumerate(jobs):      # enumerate for using index
-        publish_date = job.find('span', {'class': 'sim-posted'}).span.text.strip()
+        published_date = job.find('span', class_='sim-posted').span.text.strip()
         # discard publish_date contains 'few' word.
-        if 'few' not in publish_date:
-            skills = job.find('span', {'class': 'srp-skills'}).text.strip().replace('  ,  ', ', ')
+        if 'few' not in published_date:
+            skills = job.find('span', class_='srp-skills').text.replace('  ,  ', ', ').strip()
             # filter out z skill u choose.
-            if discarded_skill not in skills:
-                job_url = job.h2.a['href']
-                company_name = job.find('h3', {'class': 'joblist-comp-name'}).text.strip()
+            if unfamiliar_skill not in skills.lower():
+                company_name = job.h3.text.strip()
                 experience = job.li.text.strip().split('vel')[1]        # li > first & no attribute
-                location = job.find('span').text.strip()
-                # job_description = job.find('ul', {'class': 'list-job-dtl clearfix'}).li.text.strip().split('Description:')[1]
-                jobs_details.append({'publish_date': publish_date, 'skills': skills, 'company_name': company_name, 'experience': experience, 'location': location})
-                # save z results in a TXT file.
-                with open(f'timesjobs/no_{discarded_skill}_{index}.txt', 'w') as f:
+                location = job.span.text.strip()
+                more_info = job.h2.a['href']
+                # save z results in a separated TXT file.
+                with open(f'timesjobs/no_{unfamiliar_skill}_{index}.txt', 'w') as f:
+                    f.write(f'Pub_date: {published_date} \n')
                     f.write(f'Company Name: {company_name} \n')
                     f.write(f'Required Skills: {skills} \n')
-                    f.write(f'Job URL: {job_url}')
-                print(f'File saved: no_{discarded_skill}_{index}')
-    # save z results in a CSV file.
-    keys = jobs_details[0].keys()
-    with open(f'timesjobs/jobs_details wo {discarded_skill}.csv', 'w') as op_file:
-        dict_writer = csv.DictWriter(op_file, keys)
-        dict_writer.writeheader()
-        dict_writer.writerows(jobs_details)
-find_jobs(page)
+                    f.write(f'More Info: {more_info}')
+                print(f'File saved: no_{unfamiliar_skill}_{index}')
+
+                # save z results in a CSV file.
+                # job_description = job.find('ul', {'class': 'list-job-dtl clearfix'}).li.text.strip().split('Description:')[1]
+                jobs_details.append({'publish_date': published_date, 'skills': skills, 'company_name': company_name, 'experience': experience, 'location': location})
+                keys = jobs_details[0].keys()
+                with open(f'timesjobs/jobs_details wo {unfamiliar_skill}.csv', 'w') as op_file:
+                    dict_writer = csv.DictWriter(op_file, keys)
+                    dict_writer.writeheader()
+                    dict_writer.writerows(jobs_details)
+
 
 if __name__ == '__main__':
     while True:
-        find_jobs(page)
+        find_jobs()
         time_wait = 10
-        print(f'Waiting {time_wait} minutes.')
+        print()
+        print(f'Waiting {time_wait} minutes ...')
         time.sleep(time_wait * 60)
+
+# https://www.youtube.com/watch?v=XVv6mJpFOb0&t=3708s       > chapters
